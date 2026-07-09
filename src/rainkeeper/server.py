@@ -1,5 +1,7 @@
 """Rainkeeper MCP server entry point."""
+import asyncio
 from fastmcp import FastMCP
+from .client import RaindropClient
 from .tools import collections, raindrops, bulk, search, tags
 
 mcp = FastMCP(
@@ -7,15 +9,20 @@ mcp = FastMCP(
     instructions="Manage Raindrop.io bookmarks and collections. Use list_collections first to get collection IDs before moving or filing bookmarks.",
 )
 
-collections.register(mcp)
-raindrops.register(mcp)
-bulk.register(mcp)
-search.register(mcp)
-tags.register(mcp)
+_client = RaindropClient()
+
+collections.register(mcp, _client)
+raindrops.register(mcp, _client)
+bulk.register(mcp, _client)
+search.register(mcp, _client)
+tags.register(mcp, _client)
 
 
 def main():
-    mcp.run()
+    try:
+        mcp.run()
+    finally:
+        asyncio.run(_client.aclose())
 
 
 if __name__ == "__main__":

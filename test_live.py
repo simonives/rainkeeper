@@ -118,8 +118,10 @@ async def run():
             log(PASS, "update_raindrop (move)", "SKIPPED — need at least 2 collections and 1 bookmark")
 
         # ── 5. move_raindrop (bulk) ───────────────────────────────────
+        # Re-fetch current collection so section 5 is independent of the section 4 restore.
         if move_candidate and len(collections) >= 2:
-            original_col_id = move_candidate.get("collection", {}).get("$id", -1)
+            current = await client.get_raindrop(move_candidate["_id"])
+            original_col_id = current.get("collection", {}).get("$id", -1)
             test_id = move_candidate["_id"]
             target = next((c for c in collections if c["_id"] != original_col_id), None)
             if target:
@@ -141,7 +143,7 @@ async def run():
         # ── 6. Search ─────────────────────────────────────────────────
         print("\n[Search]")
         try:
-            page = await client.search("a", collection_id=0, per_page=3)
+            page = await client.list_raindrops(collection_id=0, per_page=3, search="a")
             items = page.get("items", [])
             log(PASS, "search_raindrops", f"{page.get('count', '?')} results for 'a', {len(items)} returned")
         except Exception as e:
