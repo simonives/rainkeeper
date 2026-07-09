@@ -16,7 +16,7 @@
 
 **The Raindrop.io MCP Server that works on free accounts — and actually moves bookmarks.**
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-3776ab?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-3776ab?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-powered-22c55e?style=flat-square)](https://github.com/jlowin/fastmcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
 [![Raindrop.io API v1](https://img.shields.io/badge/Raindrop.io-API%20v1-2563eb?style=flat-square)](https://developer.raindrop.io)
