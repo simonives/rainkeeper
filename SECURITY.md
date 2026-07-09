@@ -50,6 +50,30 @@ Token regeneration is immediate. The old token stops working the moment a new on
 | No persistent state | Rainkeeper holds no data between tool calls -- thin proxy to the API only |
 | Minimal dependencies | FastMCP, httpx, python-dotenv -- no unnecessary attack surface |
 | Dependency monitoring | Dependabot watches for security updates weekly |
+| No network exposure | Server runs on stdio transport; no port is bound and there is no unauthenticated network attack surface |
+| Type-safe API paths | All values interpolated into URL paths are typed `int`; string inputs travel only in JSON bodies or query parameters, encoded by httpx |
+
+---
+
+## Prompt injection and destructive tools
+
+Rainkeeper is a read-write MCP server. The destructive tools (`delete_raindrop`, `delete_collection`, `bulk_delete_raindrops`) execute immediately on instruction with no confirmation step built into the server itself.
+
+In the MCP threat model, a prompt-injection attack embedded in a malicious bookmark title or note could, in principle, instruct a connected LLM to invoke these tools. This is an inherent property of any read-write MCP server, not a bug specific to Rainkeeper. The primary mitigation is the client-side permission prompt in Claude Desktop and Claude CLI, which requires explicit user approval before any tool is called.
+
+**What you can do:**
+
+- Keep the permission prompt enabled. Do not pre-approve destructive tools in `settings.local.json`.
+- Be cautious when bulk-importing or processing bookmarks from untrusted sources through an AI assistant.
+- Review what your Claude client has pre-approved under `mcpServers` in its config.
+
+---
+
+## Security audits
+
+| Date | Scope | Reviewer | Outcome |
+|---|---|---|---|
+| 2026-07-09 | Full repository (all source, config, CI, and workflow files) | Claude Fable (Anthropic) | No HIGH or MEDIUM severity vulnerabilities found. Two informational observations noted above. |
 
 ---
 
