@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rainkeeper"
+version = "0.1.0"
+description = "A self-hostable MCP server for Raindrop.io"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=0.4.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+rainkeeper = "rainkeeper.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rainkeeper"]
