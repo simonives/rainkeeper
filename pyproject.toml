@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "A self-hostable MCP server for Raindrop.io"
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "fastmcp>=0.4.0",
     "httpx>=0.27.0",
