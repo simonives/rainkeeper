@@ -1,5 +1,4 @@
-<div align="center">
-<pre>
+```
   ·  ·    ·  ·    ·  ·    ·    ·  ·    ·  ·    ·   ·  ·    ·  ·
     ·    ·    ·  ·     ·    · ·     ·    ·    ·  ·     ·  ·    ·
 
@@ -11,7 +10,9 @@
 
     ·    ·    ·  ·     ·    · ·     ·    ·    ·  ·     ·  ·    ·
   ·  ·    ·  ·    ·  ·    ·    ·  ·    ·  ·    ·   ·  ·    ·  ·
-</pre>
+```
+
+<div align="center">
 
 **The Raindrop.io MCP Server that works on free accounts — and actually moves bookmarks.**
 
