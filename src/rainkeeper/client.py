@@ -3,28 +3,61 @@ import httpx
 from .config import BASE_URL, AUTH_HEADER
 
 
+def _check_response(r: httpx.Response) -> None:
+    """Raise a clear error for known API failure modes instead of a raw httpx exception."""
+    if r.is_success:
+        return
+    status = r.status_code
+    if status == 401:
+        raise RuntimeError(
+            "Raindrop.io authentication failed (401). "
+            "Check that RAINDROP_ACCESS_TOKEN in your .env is valid. "
+            "Regenerate it at: https://app.raindrop.io/settings/integrations"
+        )
+    if status == 404:
+        raise RuntimeError(f"Raindrop.io resource not found (404): {r.url}")
+    if status == 429:
+        raise RuntimeError(
+            "Raindrop.io rate limit reached (429). Wait a moment then retry."
+        )
+    if status >= 500:
+        raise RuntimeError(
+            f"Raindrop.io server error ({status}). Try again shortly."
+        )
+    r.raise_for_status()
+
+
 class RaindropClient:
     def __init__(self):
         self._client = httpx.AsyncClient(base_url=BASE_URL, headers=AUTH_HEADER)
 
+    async def aclose(self) -> None:
+        await self._client.aclose()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *args) -> None:
+        await self.aclose()
+
     async def get(self, path: str, **params) -> dict:
         r = await self._client.get(path, params={k: v for k, v in params.items() if v is not None})
-        r.raise_for_status()
+        _check_response(r)
         return r.json()
 
     async def post(self, path: str, body: dict) -> dict:
         r = await self._client.post(path, json=body)
-        r.raise_for_status()
+        _check_response(r)
         return r.json()
 
     async def put(self, path: str, body: dict) -> dict:
         r = await self._client.put(path, json=body)
-        r.raise_for_status()
+        _check_response(r)
         return r.json()
 
     async def delete(self, path: str, body: dict | None = None) -> dict:
         r = await self._client.request("DELETE", path, json=body)
-        r.raise_for_status()
+        _check_response(r)
         return r.json()
 
     # --- Collections ---
