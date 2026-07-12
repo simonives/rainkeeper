@@ -20,6 +20,7 @@
 [![FastMCP](https://img.shields.io/badge/FastMCP-powered-22c55e?style=flat-square)](https://github.com/jlowin/fastmcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
 [![Raindrop.io API v1](https://img.shields.io/badge/Raindrop.io-API%20v1-2563eb?style=flat-square)](https://developer.raindrop.io)
+[![CI Status](https://github.com/simonives/rainkeeper/actions/workflows/ci.yml/badge.svg)](https://github.com/simonives/rainkeeper/actions/workflows/ci.yml)
 
 </div>
 
