@@ -19,10 +19,7 @@ tags.register(mcp, _client)
 
 
 def main():
-    try:
-        mcp.run()
-    finally:
-        asyncio.run(_client.aclose())
+    mcp.run()
 
 
 if __name__ == "__main__":

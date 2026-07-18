@@ -32,10 +32,17 @@ def _check_response(r: httpx.Response) -> None:
 
 class RaindropClient:
     def __init__(self):
-        self._client = httpx.AsyncClient(base_url=BASE_URL, headers=get_auth_header())
+        self._httpx_client: httpx.AsyncClient | None = None
+
+    @property
+    def client(self) -> httpx.AsyncClient:
+        if self._httpx_client is None:
+            self._httpx_client = httpx.AsyncClient(base_url=BASE_URL, headers=get_auth_header())
+        return self._httpx_client
 
     async def aclose(self) -> None:
-        await self._client.aclose()
+        if self._httpx_client is not None:
+            await self._httpx_client.aclose()
 
     async def __aenter__(self):
         return self
@@ -44,22 +51,22 @@ class RaindropClient:
         await self.aclose()
 
     async def get(self, path: str, **params) -> dict:
-        r = await self._client.get(path, params={k: v for k, v in params.items() if v is not None})
+        r = await self.client.get(path, params={k: v for k, v in params.items() if v is not None})
         _check_response(r)
         return r.json()
 
     async def post(self, path: str, body: dict) -> dict:
-        r = await self._client.post(path, json=body)
+        r = await self.client.post(path, json=body)
         _check_response(r)
         return r.json()
 
     async def put(self, path: str, body: dict) -> dict:
-        r = await self._client.put(path, json=body)
+        r = await self.client.put(path, json=body)
         _check_response(r)
         return r.json()
 
     async def delete(self, path: str, body: dict | None = None) -> dict:
-        r = await self._client.request("DELETE", path, json=body)
+        r = await self.client.request("DELETE", path, json=body)
         _check_response(r)
         return r.json()
 
